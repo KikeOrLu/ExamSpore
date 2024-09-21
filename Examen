@@ -1,0 +1,117 @@
+EXAMEN DE SISTEMAS EMBEBIDOS
+SECCIÓN 1: FUNDAMENTOS DE MICROCONTROLADORES 
+1. Diferencias entre HSE y LSE
+Explica las diferencias entre los osciladores de alta velocidad (HSE) y baja velocidad (LSE).  
+
+En los microcontroladores, HSE (High-Speed External) y LSE (Low-Speed External) son dos tipos de fuentes de reloj externas que se utilizan para diferentes propósitos:
+HSE (High-Speed External):
+•	Frecuencia: Generalmente se utiliza para frecuencias más altas, típicamente en el rango de MHz.
+•	Uso: Se emplea para tareas que requieren alta precisión y velocidad, como la comunicación USB, Ethernet, y otras interfaces de alta velocidad.
+•	Componentes: Puede usar un cristal de cuarzo o un oscilador externo para generar la señal de reloj.
+LSE (Low-Speed External):
+Permitir que el oscilador de baja potencia funcione con un cristal externo y funcione como entrada para el peripehral RTC, ( su uso principal ).
+•	Frecuencia: Normalmente opera a frecuencias mucho más bajas, típicamente 32.768 kHz, que es una frecuencia estándar para relojes de tiempo real (RTC).
+•	Uso: Ideal para aplicaciones que requieren bajo consumo de energía y alta precisión en el tiempo, como los relojes de tiempo real (RTC).
+•	Componentes: Utiliza un cristal de cuarzo de baja frecuencia para generar la señal de reloj.
+
+
+2. Uso de un TCXO
+¿En qué casos se utiliza un TCXO y qué configuración especial se debe tener en cuenta en el microcontrolador?  
+Un TCXO (Temperature Compensated Crystal Oscillator) es un tipo de oscilador de cristal que se utiliza en microcontroladores para proporcionar una señal de reloj muy precisa y estable, incluso cuando hay variaciones de temperatura.
+•	Sistemas de comunicación: como radios y equipos de telecomunicaciones, donde la precisión de la frecuencia es crucial.
+•	Dispositivos GPS: para mantener la precisión en la sincronización de señales.
+•	Equipos de medición y prueba: donde se necesita una referencia de frecuencia estable.
+•	Relojes y temporizadores de alta precisión: en aplicaciones industriales y científicas.
+
+Al integrar un TCXO con un microcontrolador, se deben tener en cuenta las siguientes configuraciones:
+•	Fuente de Alimentación Estable: Asegúrate de que el TCXO reciba una fuente de alimentación estable y libre de ruido para mantener su precisión.
+•	Configuración de Entrada de Reloj: Configura el microcontrolador para aceptar la señal de reloj del TCXO. Esto puede implicar ajustar los registros de configuración del reloj del microcontrolador.
+•	Aislamiento de Ruido: Implementa técnicas de diseño de PCB para minimizar el ruido eléctrico que podría afectar la señal del TCXO.
+•	Compensación de Temperatura: Aunque el TCXO ya está compensado por temperatura, asegúrate de que el entorno operativo no exceda las especificaciones del fabricante para evitar desviaciones en la frecuencia.
+
+
+3. Modos de consumo energético
+Describe los modos de consumo energético en un microcontrolador y las limitaciones que tiene cada uno.
+Los microcontroladores pueden operar en varios modos de consumo energético, cada uno con sus propias características y limitaciones. Aquí te describo los más comunes:
+•	Modo Activo
+Descripción: El microcontrolador está completamente operativo, ejecutando instrucciones y utilizando todos sus periféricos.
+Consumo: Es el modo de mayor consumo energético.
+Limitaciones: La duración de la batería se reduce significativamente si el microcontrolador permanece en este modo por largos periodos.
+•	Modo Light Sleep
+Descripción: El microcontrolador apaga partes del sistema, como la CPU, pero mantiene activos algunos periféricos y la memoria RAM.
+Consumo: Menor que en modo activo, pero aún considerable.
+Limitaciones: Aunque reduce el consumo, el microcontrolador sigue consumiendo energía para mantener ciertos periféricos activos1.
+•	Modo Deep Sleep
+Descripción: La mayoría de los componentes del microcontrolador se apagan, incluyendo la CPU y la memoria RAM, pero se mantiene un reloj en tiempo real (RTC) y algunos periféricos esenciales.
+Consumo: Muy bajo, ideal para aplicaciones que requieren largos periodos de inactividad.
+Limitaciones: El tiempo de despertar es mayor comparado con el modo Light Sleep, y se pierde el estado de la RAM, lo que puede requerir una reconfiguración al despertar2.
+•	Modo Hibernación
+Descripción: El microcontrolador apaga casi todos sus componentes, incluyendo el RTC.
+Consumo: Extremadamente bajo, similar al consumo de energía de un dispositivo apagado.
+Limitaciones: El tiempo de despertar es el más largo de todos los modos, y se pierde toda la información del estado anterior, requiriendo una inicialización completa al despertar2.
+•	Modo Power Off
+Descripción: El microcontrolador está completamente apagado.
+Consumo: Prácticamente nulo.
+Limitaciones: Requiere un reinicio completo para volver a operar, lo que implica un tiempo de arranque considerable.
+
+4. Estados de un GPIO y modos OP/PP
+Describe los tres tipos de estados de un GPIO y los modos de salida: Open Drain (OD) y Push-Pull (PP). 
+
+Cada uno de los pines GPIO puede configurarse por software como salida (push-pull o open-drain), como entrada (con o sin pull-up o pull-down) o como función periférica alternativa (AF). La mayoría de los pines GPIO se comparten con funciones digitales o analógicas especiales.
+
+La salida Push-Pull (Push-Pull Output) puede generar dos niveles de voltaje, uno es el nivel alto (push, corriente de tracción, voltaje alto de salida) y el otro es el nivel bajo (pull, corriente de drenaje, voltaje bajo de salida). La salida Push-Pull se puede implementar utilizando un par de interruptores, generalmente transistores o transistores de efecto de campo (FET), en el chip.
+•	Push: cuando la señal de entrada es un nivel bajo, el P-MOS se activa y la corriente fluye desde VDD a través de él hacia el pin de salida. En este momento, el N-MOS está en corte.
+•	Pull: cuando la señal de entrada es un nivel alto, el N-MOS se activa y la corriente fluye desde el pin de salida a través de él hacia GND. En este momento, el P-MOS está en corte.
+
+La salida de Drenaje Abierto (OD, Open Drain Output) se refiere a la apertura del drenaje del transistor MOS. También se le conoce históricamente como salida de Colector Abierto (OC, Open Collect Output).
+La forma más básica de salida de Drenaje Abierto tiene solo dos estados: bajo y alta impedancia. Si se requiere un nivel alto de salida, se necesita una resistencia de pull-up externa.
+
+
+5. Funcionamiento del módulo ADC
+Explica cómo funciona un módulo ADC en un microcontrolador y su relación con el controlador de reloj (RCC). 
+
+Un módulo ADC (Convertidor Analógico a Digital) en un microcontrolador convierte señales analógicas en datos digitales que el microcontrolador puede procesar. Aquí te explico cómo funciona y su relación con el controlador de reloj (RCC):
+Funcionamiento del Módulo ADC
+•	Entrada Analógica: El módulo ADC recibe una señal analógica a través de uno de sus pines de entrada.
+•	Selección de Canal: Los microcontroladores suelen tener múltiples canales ADC, permitiendo seleccionar entre varias entradas analógicas.
+•	Conversión: La señal analógica se convierte en una señal digital mediante un proceso de muestreo y cuantificación. La resolución del ADC (por ejemplo, 8 bits, 10 bits, 12 bits) determina la precisión de esta conversión.
+•	Registro de Resultado: El valor digital resultante se almacena en un registro específico del microcontrolador, desde donde puede ser leído y procesado por el software.
+
+Relación con el Controlador de Reloj (RCC)
+El controlador de reloj (RCC) es crucial para el funcionamiento del ADC por las siguientes razones:
+•	Frecuencia de Reloj: El ADC necesita una señal de reloj para realizar la conversión. Esta señal de reloj puede ser proporcionada por el RCC, que configura y distribuye las diferentes frecuencias de reloj dentro del microcontrolador.
+•	Configuración del Reloj ADC: El RCC permite seleccionar la fuente de reloj y ajustar la frecuencia adecuada para el ADC. Esto es importante porque la velocidad de conversión del ADC depende de la frecuencia del reloj.
+•	Sincronización: El RCC asegura que el ADC opere de manera sincronizada con el resto del sistema, evitando conflictos y asegurando una conversión precisa y eficiente.
+Ejemplo de Configuración
+En un microcontrolador como el STM32, la configuración del ADC y su reloj podría implicar los siguientes pasos:
+•	Habilitar el Reloj del ADC: Usar el RCC para habilitar el reloj del periférico ADC.
+•	Configurar el Canal ADC: Seleccionar el canal de entrada analógica que se desea convertir.
+•	Ajustar la Frecuencia del Reloj: Configurar la frecuencia del reloj del ADC a través del RCC para asegurar una conversión precisa.
+•	Iniciar la Conversión: Comenzar la conversión y leer el valor digital resultante del registro del ADC.
+
+
+6. Funcionamiento del NVIC
+Indica cómo funciona el NVIC (Nested Vectored Interrupt Controller) y enlista al menos 5 tipos de interrupciones.  
+El NVIC (Nested Vectored Interrupt Controller) es un componente crucial en los microcontroladores ARM Cortex-M. Su función principal es gestionar las interrupciones y excepciones, permitiendo una respuesta rápida y de baja latencia a eventos que requieren atención inmediata.
+
+En la mayoría de los microcontroladores, la función de interrupción permite que un periférico o un hardware externo envíe una solicitud a un procesador para que el procesador pueda ejecutar un fragmento de código para atender la solicitud. El proceso implica suspender la tarea de ejecución actual, o despertar del modo de suspensión, y ejecutar el fragmento de código de software llamado controlador de excepciones para atender la solicitud. Después de atender la solicitud, el procesador puede reanudar el código interrumpido anterior.
+Flujo de interrupción:
+•	El periférico activa una interrupción en el procesador.
+•	El procesador suspende la ejecución del flujo del programa. Modo de subproceso.
+•	Se guardan los registros de uso general del procesador (incluido el contador de programa). Apilamiento.
+•	El procesador ejecuta la rutina de servicio de interrupción (ISR) del periférico de activación. Modo de controlador.
+•	Los registros de procesador guardados se recuperan y restauran. Desapilar.
+•	El procesador vuelve a ejecutar el flujo del programa anterior.
+•	El procesador sabe exactamente qué instrucción reanudar, ya que el contador de programa anterior se guardó antes de la interrupción.
+Tipos de interrupción:
+•	WWDG - Interrupción de perro guardian
+•	RCC/CRS - Interrupción global RCC
+•	DMA1_Channel - Interrupción del canal 1DMA1
+•	FLASH - Interrupción global de Flash
+•	ADC_COMP - Interrupciones ADC y COMP (ADC combinado con EXTI 17 & 18)
+•	Reset - Reinicio
+•	NMI_Handler - Interrupción no enmascarable. 
+•	HardFault_Handler - Toda clase de fallo
+•	SVC_Handler - Llamada de servicio del sistema mediante instrucción SWI
+•	PendSV_Handler - Petición pendible de servicio del sistema
+•	SysTick_Handler - Temporizador de tick del sistema
