@@ -1,0 +1,3 @@
+Programa y configura, usando STM32CUBE IDE, una comunicación serial maestro-esclavo vía 
+UART entre dos placas. Envía el mensaje "PING" y espera el "PONG" para enviar el siguiente 
+"PING" mediante interrupciones. 
